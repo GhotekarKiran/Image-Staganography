@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecretPixel - Secure Your Secrets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      :root {
+          /* Modern Cyberpunk Theme */
+          --background: #0f0e17;
+          --foreground: #fffffe;
+          --primary: #7f5af0;
+          --primary-dark: #6a4cc7;
+          --secondary: #2cb67d;
+          --secondary-dark: #249d69;
+          --accent: #ff8906;
+          --muted: #94a1b2;
+          --card-bg: rgba(29, 27, 43, 0.8);
+          --card-hover: rgba(39, 37, 53, 0.9);
+          --border-color: rgba(127, 90, 240, 0.3);
+          --shadow-color: rgba(0, 0, 0, 0.5);
+          --glow-color: rgba(127, 90, 240, 0.6);
+          --radius: 0.75rem;
+          --radius-lg: 1.5rem;
+      }
+
+      /* Base Styles */
+      body {
+          font-family: 'Outfit', sans-serif;
+          background-color: var(--background);
+          color: var(--foreground);
+          margin: 0;
+          line-height: 1.6;
+          overflow-x: hidden;
+          animation: fadeIn 1s ease-in-out;
+          background-image: 
+            radial-gradient(circle at 10% 20%, rgba(127, 90, 240, 0.05) 0%, transparent 20%),
+            radial-gradient(circle at 90% 50%, rgba(44, 182, 125, 0.05) 0%, transparent 25%),
+            radial-gradient(circle at 50% 80%, rgba(255, 137, 6, 0.05) 0%, transparent 20%);
+          background-attachment: fixed;
+      }
+
+      @keyframes fadeIn {
+          from {
+              opacity: 0;
+              transform: translateY(-20px);
+          }
+          to {
+              opacity: 1;
+              transform: translateY(0);
+          }
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+          font-family: 'Space Grotesk', sans-serif;
+          font-weight: 700;
+          line-height: 1.2;
+          margin-top: 0;
+          color: var(--foreground);
+      }
+
+      /* Links */
+      a {
+          text-decoration: none;
+          color: var(--primary);
+          transition: all 0.3s ease;
+          display: inline-block;
+          position: relative;
+      }
+
+      a:hover {
+          color: var(--accent);
+          transform: translateY(-2px);
+      }
+
+      /* Container */
+      .container {
+          width: 90%;
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+      }
+
+      /* Utility Classes */
+      .flex { display: flex; }
+      .justify-between { justify-content: space-between; }
+      .items-center { align-items: center; }
+      .items-start { align-items: flex-start; }
+      .space-x-8 > * + * { margin-left: 2rem; }
+      .space-x-6 > * + * { margin-left: 1.5rem; }
+      .space-y-8 > * + * { margin-top: 2rem; }
+      .space-y-6 > * + * { margin-top: 1.5rem; }
+      .space-y-4 > * + * { margin-top: 1rem; }
+      .space-y-24 > * + * { margin-top: 6rem; }
+      .text-center { text-align: center; }
+      .text-3xl { font-size: 1.875rem; }
+      .text-4xl { font-size: 2.25rem; }
+      .text-5xl { font-size: 3rem; }
+      .text-7xl { font-size: 4.5rem; }
+      .text-xl { font-size: 1.25rem; }
+      .text-lg { font-size: 1.125rem; }
+      .text-sm { font-size: 0.875rem; }
+      .text-primary { color: var(--primary); }
+      .text-accent { color: var(--accent); }
+      .text-muted { color: var(--muted); }
+      .font-bold { font-weight: 700; }
+      .mb-2 { margin-bottom: 0.5rem; }
+      .mb-4 { margin-bottom: 1rem; }
+      .mb-6 { margin-bottom: 1.5rem; }
+      .mb-8 { margin-bottom: 2rem; }
+      .mb-10 { margin-bottom: 2.5rem; }
+      .mb-12 { margin-bottom: 3rem; }
+      .mb-16 { margin-bottom: 4rem; }
+      .mx-auto { margin-left: auto; margin-right: auto; }
+      .max-w-2xl { max-width: 42rem; }
+      .max-w-3xl { max-width: 48rem; }
+      .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .px-8 { padding-left: 2rem; padding-right: 2rem; }
+      .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+      .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+      .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+      .mt-32 { margin-top: 8rem; }
+      .p-1 { padding: 0.25rem; }
+      .p-6 { padding: 1.5rem; }
+      .p-8 { padding: 2rem; }
+      .grid { display: grid; }
+      .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+      .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+      .gap-12 { gap: 3rem; }
+      .w-12 { width: 3rem; }
+      .h-12 { height: 3rem; }
+      .w-10 { width: 2.5rem; }
+      .h-10 { height: 2.5rem; }
+      .bg-primary { background-color: var(--primary); }
+      .bg-secondary { background-color: var(--secondary); }
+      .bg-accent { background-color: var(--accent); }
+      .rounded-lg { border-radius: var(--radius); }
+      .rounded-xl { border-radius: var(--radius-lg); }
+      .rounded-full { border-radius: 9999px; }
+      .min-h-screen { min-height: 100vh; }
+      .relative { position: relative; }
+      .absolute { position: absolute; }
+      .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+      .z-10 { z-index: 10; }
+      .w-full { width: 100%; }
+      .mr-4 { margin-right: 1rem; }
+      .ml-2 { margin-left: 0.5rem; }
+      .w-6 { width: 1.5rem; }
+      .h-6 { height: 1.5rem; }
+      .flex-shrink-0 { flex-shrink: 0; }
+      .flex-grow { flex-grow: 1; }
+      .hidden { display: none; }
+      .pointer-events-none { pointer-events: none; }
+      .overflow-hidden { overflow: hidden; }
+      .sticky { position: sticky; }
+      .top-0 { top: 0; }
+      .z-50 { z-index: 50; }
+
+      /* Button Styles */
+      .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1rem 2.5rem;
+          font-size: 1.1rem;
+          font-weight: 600;
+          border-radius: var(--radius);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-align: center;
+          border: none;
+          position: relative;
+          overflow: hidden;
+          z-index: 1;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+          letter-spacing: 0.5px;
+      }
+
+      .btn-primary {
+          background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+          color: #fff;
+          box-shadow: 0 4px 15px var(--glow-color);
+      }
+
+      .btn-primary::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent 40%);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+          opacity: 0;
+          z-index: -1;
+      }
+
+      .btn-primary:hover::before {
+          width: 350px;
+          height: 350px;
+          opacity: 1;
+      }
+
+      .btn-primary:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px var(--glow-color);
+      }
+
+      .btn-primary:active {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 15px var(--glow-color);
+      }
+
+      .btn-accent {
+          background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+          color: #fff;
+          box-shadow: 0 4px 15px rgba(44, 182, 125, 0.4);
+      }
+
+      .btn-accent::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent 40%);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+          opacity: 0;
+          z-index: -1;
+      }
+
+      .btn-accent:hover::before {
+          width: 350px;
+          height: 350px;
+          opacity: 1;
+      }
+
+      .btn-accent:hover {
+          transform: scale(1.05);
+          box-shadow: 0 8px 25px rgba(44, 182, 125, 0.5);
+      }
+
+      .btn-accent:active {
+          transform: scale(1);
+          box-shadow: 0 4px 15px rgba(44, 182, 125, 0.4);
+      }
+
+      /* Input & Textarea Styles */
+      .form-control {
+          display: block;
+          width: 100%;
+          padding: 1.2rem 1.5rem;
+          font-size: 1.1rem;
+          font-family: 'Space Grotesk', monospace;
+          color: var(--foreground);
+          background-color: rgba(29, 27, 43, 0.6);
+          border: 1px solid var(--border-color);
+          border-radius: var(--radius);
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-control:focus {
+          border-color: var(--primary);
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(127, 90, 240, 0.3);
+          transform: scale(1.01);
+          background-color: rgba(29, 27, 43, 0.8);
+      }
+
+      .form-textarea {
+          resize: vertical;
+          min-height: 180px;
+      }
+
+      /* Card Styles */
+      .card {
+          background-color: var(--card-bg);
+          border-radius: var(--radius-lg);
+          box-shadow: 0 10px 30px var(--shadow-color);
+          transition: all 0.4s ease;
+          backdrop-filter: blur(10px);
+          border: 1px solid var(--border-color);
+          overflow: hidden;
+          position: relative;
+      }
+
+      .card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(45deg, transparent 48%, var(--primary) 49%, var(--primary) 51%, transparent 52%);
+          background-size: 10px 10px;
+          opacity: 0.05;
+          z-index: -1;
+          animation: slideLines 15s linear infinite;
+      }
+
+      @keyframes slideLines {
+          0% { background-position: 0 0; }
+          100% { background-position: 50px 50px; }
+      }
+
+      .card:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 15px 40px var(--shadow-color);
+          background-color: var(--card-hover);
+      }
+
+      .card-body {
+          padding: 2rem;
+          color: var(--foreground);
+      }
+
+      /* Feature Card */
+      .feature-card {
+          padding: 2.5rem;
+          border-radius: var(--radius-lg);
+          background-color: var(--card-bg);
+          box-shadow: 0 10px 30px var(--shadow-color);
+          border: 1px solid var(--border-color);
+          backdrop-filter: blur(10px);
+          transition: all 0.5s ease;
+          position: relative;
+          overflow: hidden;
+      }
+
+      .feature-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, var(--primary), var(--secondary));
+          opacity: 0;
+          transition: opacity 0.5s ease, transform 0.5s ease;
+          z-index: -1;
+          transform: scaleX(0);
+          transform-origin: left;
+      }
+
+      .feature-card:hover::before {
+          opacity: 0.15;
+          transform: scaleX(1);
+      }
+
+      .feature-card:hover {
+          transform: translateY(-15px) scale(1.03);
+          box-shadow: 0 20px 40px var(--shadow-color);
+      }
+
+      .feature-card .icon {
+          color: var(--primary);
+          margin-bottom: 1.5rem;
+          transition: all 0.5s ease;
+          display: inline-block;
+          font-size: 2.5rem;
+      }
+
+      .feature-card:hover .icon {
+          color: var(--accent);
+          transform: scale(1.2) rotate(10deg);
+      }
+
+      .feature-card h3 {
+          font-size: 1.8rem;
+          margin-bottom: 1rem;
+          transition: color 0.3s;
+      }
+
+      .feature-card:hover h3 {
+          color: var(--primary);
+      }
+
+      .feature-card p {
+          color: var(--muted);
+          line-height: 1.7;
+          font-size: 1.1rem;
+      }
+
+      /* Step Styles */
+      .step {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 3rem;
+          position: relative;
+      }
+
+      .step:not(:last-child)::after {
+          content: '';
+          position: absolute;
+          top: 3rem;
+          left: 1.4rem;
+          width: 3px;
+          height: calc(100% - 2.5rem);
+          background: linear-gradient(to bottom, var(--primary), var(--secondary));
+          z-index: 0;
+      }
+
+      .step-number {
+          flex-shrink: 0;
+          width: 3rem;
+          height: 3rem;
+          border-radius: 50%;
+          background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 1.5rem;
+          margin-right: 2rem;
+          transition: all 0.4s ease;
+          box-shadow: 0 5px 15px rgba(127, 90, 240, 0.4);
+          z-index: 1;
+          position: relative;
+      }
+
+      .step-number::before {
+          content: '';
+          position: absolute;
+          inset: -5px;
+          border-radius: 50%;
+          background: conic-gradient(
+              from 0deg,
+              transparent 0%,
+              var(--primary) 25%,
+              var(--secondary) 50%,
+              var(--accent) 75%,
+              transparent 100%
+          );
+          opacity: 0;
+          transition: opacity 0.4s ease;
+          animation: spin 4s linear infinite;
+          z-index: -1;
+      }
+
+      @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+      }
+
+      .step:hover .step-number::before {
+          opacity: 1;
+      }
+
+      .step:hover .step-number {
+          transform: scale(1.15);
+          box-shadow: 0 8px 20px rgba(127, 90, 240, 0.6);
+      }
+
+      .step-content {
+          background-color: var(--card-bg);
+          border: 1px solid var(--border-color);
+          padding: 2rem;
+          border-radius: var(--radius-lg);
+          flex-grow: 1;
+          box-shadow: 0 10px 30px var(--shadow-color);
+          backdrop-filter: blur(10px);
+          transition: all 0.4s ease;
+          z-index: 1;
+      }
+
+      .step:hover .step-content {
+          box-shadow: 0 15px 40px var(--shadow-color);
+          transform: translateY(-8px);
+          background-color: var(--card-hover);
+      }
+
+      .step-content h3 {
+          font-size: 1.8rem;
+          margin-bottom: 0.8rem;
+      }
+
+      .step-content p {
+          color: var(--muted);
+          line-height: 1.7;
+          font-size: 1.1rem;
+      }
+
+      /* Security Feature */
+      .security-feature {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 2rem;
+          transition: all 0.4s ease;
+          padding: 1.5rem;
+          border-radius: var(--radius);
+          background-color: rgba(29, 27, 43, 0.4);
+          border: 1px solid transparent;
+      }
+
+      .security-feature:hover {
+          transform: translateX(15px);
+          background-color: rgba(29, 27, 43, 0.7);
+          border-color: var(--border-color);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .security-feature-icon {
+          flex-shrink: 0;
+          width: 3rem;
+          height: 3rem;
+          border-radius: 50%;
+          background: linear-gradient(135deg, var(--primary), var(--secondary));
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-right: 1.5rem;
+          transition: all 0.4s ease;
+          box-shadow: 0 5px 15px rgba(127, 90, 240, 0.3);
+      }
+
+      .security-feature:hover .security-feature-icon {
+          transform: scale(1.15) rotate(10deg);
+          box-shadow: 0 8px 20px rgba(127, 90, 240, 0.5);
+      }
+
+      .security-feature h3 {
+          font-size: 1.6rem;
+          font-weight: 600;
+          margin-bottom: 0.6rem;
+          transition: color 0.3s;
+      }
+
+      .security-feature:hover h3 {
+          color: var(--primary);
+      }
+
+      .security-feature p {
+          color: var(--muted);
+          line-height: 1.7;
+          font-size: 1.1rem;
+      }
+
+      /* Header Styles */
+      header {
+          background-color: rgba(15, 14, 23, 0.8);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(127, 90, 240, 0.2);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+          transition: all 0.4s ease;
+      }
+
+      header nav ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+      }
+
+      header nav ul li a {
+          color: var(--foreground);
+          transition: all 0.3s ease;
+          padding: 0.5rem 0;
+          position: relative;
+          font-weight: 500;
+          font-size: 1.1rem;
+      }
+
+      header nav ul li a::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(to right, var(--primary), var(--secondary));
+          transition: width 0.3s ease;
+      }
+
+      header nav ul li a:hover::after {
+          width: 100%;
+      }
+
+      header nav ul li a:hover {
+          color: var(--primary);
+          transform: translateY(-2px);
+      }
+
+      /* Logo */
+      .logo {
+          font-family: 'Space Grotesk', sans-serif;
+          font-weight: 700;
+          font-size: 1.8rem;
+          background: linear-gradient(to right, var(--primary), var(--accent));
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          position: relative;
+          display: inline-block;
+      }
+
+      .logo::before {
+          content: '';
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          background-color: var(--primary);
+          border-radius: 50%;
+          top: -5px;
+          left: -10px;
+          opacity: 0.2;
+          filter: blur(8px);
+          animation: pulse 3s infinite;
+      }
+
+      @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 0.2; }
+          50% { transform: scale(1.5); opacity: 0.4; }
+      }
+
+      /* Sections */
+      #hero {
+          padding-top: 12rem;
+          padding-bottom: 12rem;
+          position: relative;
+          overflow: hidden;
+      }
+
+      /* Hero Particles */
+      .particle {
+          position: absolute;
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background-color: var(--primary);
+          opacity: 0.3;
+          pointer-events: none;
+      }
+
+      /* Animated Background */
+      .bg-grid {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: 
+              linear-gradient(to right, rgba(127, 90, 240, 0.05) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(127, 90, 240, 0.05) 1px, transparent 1px);
+          background-size: 50px 50px;
+          z-index: -1;
+      }
+
+      .bg-glow {
+          position: absolute;
+          width: 60%;
+          height: 60%;
+          top: 20%;
+          left: 20%;
+          background: radial-gradient(circle, rgba(127, 90, 240, 0.1) 0%, transparent 70%);
+          z-index: -2;
+          animation: float 10s ease-in-out infinite;
+      }
+
+      @keyframes float {
+          0%, 100% { transform: translate(0, 0); }
+          25% { transform: translate(-5%, 5%); }
+          50% { transform: translate(5%, -5%); }
+          75% { transform: translate(5%, 5%); }
+      }
+
+      #features {
+          position: relative;
+          padding-top: 8rem;
+          padding-bottom: 10rem;
+      }
+
+      /* Angled Divider */
+      #features::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 150px;
+          background-color: var(--background);
+          clip-path: polygon(0 100%, 100% 30%, 100% 100%);
+          pointer-events: none;
+      }
+
+      #security {
+          background-color: rgba(29, 27, 43, 0.7);
+          color: #fff;
+          position: relative;
+          overflow: hidden;
+          backdrop-filter: blur(10px);
+      }
+
+      #security::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 150px;
+          background-color: rgba(29, 27, 43, 0.7);
+          clip-path: polygon(0 0, 100% 70%, 0 100%);
+          pointer-events: none;
+      }
+
+      /* Security Dashboard */
+      .security-dashboard {
+          background: linear-gradient(135deg, rgba(29, 27, 43, 0.9), rgba(15, 14, 23, 0.9));
+          border-radius: var(--radius-lg);
+          border: 1px solid var(--border-color);
+          box-shadow: 0 15px 40px var(--shadow-color);
+          overflow: hidden;
+          position: relative;
+      }
+
+      .security-dashboard::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: conic-gradient(
+              from 0deg,
+              transparent 0%,
+              rgba(127, 90, 240, 0.1) 25%,
+              rgba(44, 182, 125, 0.1) 50%,
+              rgba(255, 137, 6, 0.1) 75%,
+              transparent 100%
+          );
+          animation: rotate 20s linear infinite;
+          z-index: -1;
+      }
+
+      @keyframes rotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+      }
+
+      .security-dashboard-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 1.5rem;
+          border-bottom: 1px solid rgba(127, 90, 240, 0.1);
+          transition: all 0.3s ease;
+      }
+
+      .security-dashboard-item:last-child {
+          border-bottom: none;
+      }
+
+      .security-dashboard-item:hover {
+          background-color: rgba(127, 90, 240, 0.1);
+      }
+
+      .security-dashboard-item span:last-child {
+          font-weight: 600;
+          color: var(--primary);
+      }
+
+      /* Contact Form */
+      #contact {
+          position: relative;
+          overflow: hidden;
+      }
+
+      #contact::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: radial-gradient(circle at 20% 30%, rgba(127, 90, 240, 0.1) 0%, transparent 50%);
+          z-index: -1;
+      }
+
+      /* Footer */
+      footer {
+          border-top: 1px solid rgba(127, 90, 240, 0.2);
+          padding: 3rem 0;
+          text-align: center;
+          color: var(--muted);
+          position: relative;
+          overflow: hidden;
+      }
+
+      footer::before {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: linear-gradient(to top, rgba(15, 14, 23, 0.8), transparent);
+          z-index: -1;
+      }
+
+      /* Media Queries */
+      @media (max-width: 768px) {
+          .container {
+              width: 95%;
+              padding: 0 1rem;
+          }
+
+          h1 {
+              font-size: 2.5rem;
+          }
+
+          .text-7xl {
+              font-size: 3rem;
+          }
+
+          .feature-card, .step-content, .security-feature {
+              padding: 1.5rem;
+          }
+
+          .grid {
+              grid-template-columns: 1fr;
+          }
+
+          .space-x-6 > * + * {
+              margin-left: 1rem;
+          }
+
+          #hero {
+              padding-top: 8rem;
+              padding-bottom: 8rem;
+          }
+
+          .step {
+              flex-direction: column;
+          }
+
+          .step-number {
+              margin-bottom: 1rem;
+          }
+
+          .step:not(:last-child)::after {
+              display: none;
+          }
+      }
+
+      /* Animations */
+      @keyframes floatUpDown {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+      }
+
+      /* Hero Title Animation */
+      .hero-title {
+          background: linear-gradient(to right, var(--foreground), var(--primary), var(--secondary), var(--accent), var(--foreground));
+          background-size: 200% auto;
+          color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: textGradient 8s linear infinite;
+      }
+
+      @keyframes textGradient {
+          to { background-position: 200% center; }
+      }
+
+      /* Glowing Button Effect */
+      .btn-glow {
+          position: relative;
+      }
+
+      .btn-glow::after {
+          content: '';
+          position: absolute;
+          top: -5px;
+          left: -5px;
+          right: -5px;
+          bottom: -5px;
+          background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+          background-size: 400% 400%;
+          z-index: -1;
+          border-radius: calc(var(--radius) + 5px);
+          animation: glowingBorder 3s ease-in-out infinite;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+      }
+
+      .btn-glow:hover::after {
+          opacity: 1;
+      }
+
+      @keyframes glowingBorder {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+      }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen relative">
+        <!-- Background Elements -->
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+        <div id="particles-container"></div>
+
+        <header class="sticky top-0 z-50">
+            <nav class="container py-4">
+                <div class="flex justify-between items-center">
+                    <a href="/" class="logo">SecretPixel</a>
+                    <ul class="flex space-x-6">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#security">Security</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main class="relative z-10">
+            <section id="hero" class="text-center">
+                <div class="container">
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6 hero-title">Secure Your Secrets in Plain Sight</h1>
+                    <p class="text-xl mb-10 max-w-2xl mx-auto">Advanced image steganography powered by cutting-edge AI and quantum-resistant encryption.</p>
+                    <a href="/app" class="btn btn-primary btn-glow">Start Encrypting Now</a>
+                </div>
+            </section>
+
+            <section id="features" class="">
+                <div class="container">
+                    <h2 class="text-4xl font-bold text-center">Unparalleled Security Features</h2>
+                    <div class="grid md:grid-cols-3 gap-12 mt-32">
+                        <div class="feature-card">
+                            <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                            <h3>Quantum-Resistant Encryption</h3>
+                            <p>Future-proof your data with our post-quantum cryptographic algorithms designed to withstand attacks from quantum computers.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="icon"><i class="fas fa-brain"></i></div>
+                            <h3> Secure Key Management</h3>
+                            <p>Our robust key management system ensures the secure generation, storage, and management of encryption keys, preventing unauthorized access.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="icon"><i class="fas fa-lock"></i></div>
+                            <h3>Zero-Knowledge Architecture</h3>
+                            <p>Your data is encrypted and decrypted client-side, ensuring your privacy and preventing any third-party access.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="how-it-works" class="py-20">
+                <div class="container">
+                    <h2 class="text-4xl font-bold text-center">How It Works</h2>
+                    <div class="grid md:grid-cols-2 gap-12 mt-32">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3>Upload Your Image</h3>
+                                <p>Choose any image to serve as the carrier for your hidden message. Our system works with JPG, PNG, and WebP formats.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3>Enter Your Secret</h3>
+                                <p>Write your secret message or upload a file to be encrypted and hidden within the image using our proprietary algorithms.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3>Set Encryption Key</h3>
+                                <p>Create a strong password or use our secure key generator to protect your hidden data from unauthorized access.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h3>Download Your Image</h3>
+                                <p>Download your visually identical image that now contains your encrypted secret message, ready to be shared securely.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="security" class="py-20">
+                <div class="container">
+                    <h2 class="text-4xl font-bold text-center">Advanced Security Features</h2>
+                    <div class="grid md:grid-cols-2 gap-12 mt-32">
+                        <div>
+                            <div class="security-feature">
+                                <div class="security-feature-icon"><i class="fas fa-shield-alt"></i></div>
+                                <div>
+                                    <h3>End-to-End Encryption</h3>
+                                    <p>Your data is encrypted from your browser to our servers using military-grade encryption protocols.</p>
+                                </div>
+                            </div>
+                            <div class="security-feature">
+                                <div class="security-feature-icon"><i class="fas fa-fingerprint"></i></div>
+                                <div>
+                                    <h3>Future-proofing</h3>
+                                    <p>We're constantly evaluating the latest authentication technologies to deliver a seamless and highly secure user experience, including biometric verification.</p>
+                                </div>
+                            </div>
+                            <div class="security-feature">
+                                <div class="security-feature-icon"><i class="fas fa-user-secret"></i></div>
+                                <div>
+                                    <h3>Zero-Knowledge Architecture</h3>
+                                    <p>We never see your unencrypted data or encryption keys, ensuring complete privacy.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="security-dashboard p-6 rounded-xl">
+                            <h3 class="text-2xl font-bold mb-6">Security Dashboard</h3>
+                            <div class="space-y-4">
+                                <div class="security-dashboard-item">
+                                    <span>Encryption Strength</span>
+                                    <span>256-bit AES</span>
+                                </div>
+                                <div class="security-dashboard-item">
+                                    <span>Authentication</span>
+                                    <span>Under Process</span>
+                                </div>
+                                <div class="security-dashboard-item">
+                                    <span>Encryption Mode</span>
+                                    <span>Quantum-Resistant</span>
+                                </div>
+                                <div class="security-dashboard-item">
+                                    <span>Security Audit</span>
+                                    <span>Passed</span>
+                                </div>
+                                <div class="security-dashboard-item">
+                                    <span>Data Retention</span>
+                                    <span>None</span>
+                                </div>
+                                <div class="security-dashboard-item">
+                                    <span>Vulnerability Testing</span>
+                                    <span>Continuous</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="py-20">
+                <div class="container">
+                    <h2 class="text-4xl font-bold text-center">Contact Us</h2>
+                    <div class="max-w-3xl mx-auto mt-32">
+                        <form action="/contact" method="POST" class="space-y-6">
+                            <div>
+                                <input type="text" name="name" placeholder="Your Name" class="form-control">
+                            </div>
+                            <div>
+                                <input type="email" name="email" placeholder="Your Email" class="form-control">
+                            </div>
+                            <div>
+                                <textarea name="message" placeholder="Your Message" class="form-control form-textarea"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-accent btn-glow">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p class="mb-4">© 2025 SecretPixel. All rights reserved.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Particle animation for hero section
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles-container');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                createParticle();
+            }
+
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                // Random position
+                const posX = Math.random() * window.innerWidth;
+                const posY = Math.random() * window.innerHeight;
+
+                // Random size
+                const size = Math.random() * 5 + 2;
+
+                // Random opacity
+                const opacity = Math.random() * 0.5 + 0.1;
+
+                // Set styles
+                particle.style.left = `${posX}px`;
+                particle.style.top = `${posY}px`;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.opacity = opacity;
+
+                // Add to container
+                particlesContainer.appendChild(particle);
+
+                // Animate
+                animateParticle(particle);
+            }
+
+            function animateParticle(particle) {
+                // Random duration
+                const duration = Math.random() * 15 + 5;
+
+                // Random direction
+                const directionX = Math.random() > 0.5 ? 1 : -1;
+                const directionY = Math.random() > 0.5 ? 1 : -1;
+
+                // Random distance
+                const distanceX = Math.random() * 100 * directionX;
+                const distanceY = Math.random() * 100 * directionY;
+
+                // Current position
+                const currentX = parseFloat(particle.style.left);
+                const currentY = parseFloat(particle.style.top);
+
+                // Animate
+                particle.style.transition = `all ${duration}s linear`;
+
+                setTimeout(() => {
+                    particle.style.left = `${currentX + distanceX}px`;
+                    particle.style.top = `${currentY + distanceY}px`;
+
+                    // Check if particle is out of viewport
+                    setTimeout(() => {
+                        if (
+                            parseFloat(particle.style.left) < 0 ||
+                            parseFloat(particle.style.left) > window.innerWidth ||
+                            parseFloat(particle.style.top) < 0 ||
+                            parseFloat(particle.style.top) > window.innerHeight
+                        ) {
+                            // Reset position
+                            particle.style.transition = 'none';
+                            particle.style.left = `${Math.random() * window.innerWidth}px`;
+                            particle.style.top = `${Math.random() * window.innerHeight}px`;
+                        }
+
+                        // Continue animation
+                        animateParticle(particle);
+                    }, duration * 1000);
+                }, 100);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.querySelector('form[action="/contact"]'); // Select the form by its action attribute
+            if (!contactForm) return; // Exit if form is not found
+
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission (page reload)
+
+                const formData = new FormData(contactForm);
+
+                fetch('/contact', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message (replace with your desired UI update)
+                        alert(data.message || 'Message sent successfully!');  // Use data.message for better feedback
+                        contactForm.reset(); // Clear the form
+                    } else {
+                        // Show error message (replace with your desired UI update)
+                        alert('Error: ' + (data.error || 'An unknown error occurred'));  // Use data.error for error details
+                    }
+                })
+                .catch(error => {
+                    // Handle network errors or other fetch issues
+                    alert('Network error: Could not send message.');
+                    console.error('Fetch error:', error); // Log the error to the console
+                });
+            });
+        });
+    </script>
+</body>
+</html>

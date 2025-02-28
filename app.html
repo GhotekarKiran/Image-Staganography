@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecretPixel - Secure Your Secrets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --background: #0f0e17;
+            --foreground: #fffffe;
+            --primary: #7f5af0;
+            --primary-dark: #6a4cc7;
+            --secondary: #2cb67d;
+            --secondary-dark: #249d69;
+            --accent: #ff8906;
+            --muted: #94a1b2;
+            --card-bg: rgba(29, 27, 43, 0.8);
+            --card-hover: rgba(39, 37, 53, 0.9);
+            --border-color: rgba(127, 90, 240, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --glow-color: rgba(127, 90, 240, 0.6);
+            --radius: 0.75rem;
+            --radius-lg: 1.5rem;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            margin: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            animation: fadeIn 1s ease-in-out;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(127, 90, 240, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 50%, rgba(44, 182, 125, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 50% 80%, rgba(255, 137, 6, 0.05) 0%, transparent 20%);
+            background-attachment: fixed;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-top: 0;
+            color: var(--foreground);
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+        }
+
+        a:hover {
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            box-shadow: 0 4px 15px var(--glow-color);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--glow-color);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(44, 182, 125, 0.4);
+        }
+
+        .btn-accent:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(44, 182, 125, 0.5);
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.1rem;
+            font-family: 'Space Grotesk', monospace;
+            color: var(--foreground);
+            background-color: rgba(29, 27, 43, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(127, 90, 240, 0.3);
+            transform: scale(1.01);
+            background-color: rgba(29, 27, 43, 0.8);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 180px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px var(--shadow-color);
+            background-color: var(--card-hover);
+        }
+
+        header {
+            background-color: rgba(15, 14, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(127, 90, 240, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        header nav ul li a {
+            color: var(--foreground);
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+            position: relative;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        header nav ul li a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        header nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            top: -5px;
+            left: -10px;
+            opacity: 0.2;
+            filter: blur(8px);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.5); opacity: 0.4; }
+        }
+
+        #encryption-section, #decryption-section {
+            padding-top: 8rem;
+            padding-bottom: 8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(127, 90, 240, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(127, 90, 240, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            background: radial-gradient(circle, rgba(127, 90, 240, 0.1) 0%, transparent 70%);
+            z-index: -2;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(-5%, 5%); }
+            50% { transform: translate(5%, -5%); }
+            75% { transform: translate(5%, 5%); }
+        }
+
+        #image-display-container {
+            margin-top: 2rem;
+            text-align: center;
+            max-height: 500px;
+        }
+
+        #image-display-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 1rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        #image-display-container a {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: var(--radius);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        #image-display-container a:hover {
+            background-color: var(--glow-color);
+        }
+
+        #decrypted-message-container {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 8px var(--shadow-color);
+            text-align: center;
+            overflow-wrap: break-word;
+        }
+
+        #decrypted-message-container p {
+            color: var(--foreground);
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .text-red-500 {
+            color: #f56565;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 0 1rem;
+            }
+
+            h1 { font-size: 2.5rem; }
+            .text-7xl { font-size: 3rem; }
+
+            #encryption-section, #decryption-section {
+                padding-top: 6rem;
+                padding-bottom: 6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen relative">
+        <div class="bg-grid"></div>
+        <div class="bg-glow"></div>
+
+        <header class="sticky top-0 z-50">
+            <nav class="container py-4">
+                <div class="flex justify-between items-center">
+                    <a href="/" class="logo">SecretPixel</a>
+                    <ul class="flex space-x-6">
+                        <li><a href="/">Home</a></li>
+                        <hr>
+                        <li><a href="#encryption-section">Encrypt</a></li>
+                        <hr>
+                        <li><a href="#decryption-section">Decrypt</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main class="relative z-10">
+            <section id="encryption-section" class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-8">Encrypt Your Message</h2>
+                <div class="card p-6">
+                    <form id="encryption-form" class="space-y-4" onsubmit="handleEncryption(event)" enctype="multipart/form-data">
+                        <div>
+                            <label for="encrypt-image" class="block text-sm font-bold mb-2">Upload Image:</label>
+                            <input type="file" id="encrypt-image" name="encryptImage" accept="image/*" class="form-control" required>
+                        </div>
+                        <div>
+                            <label for="encrypt-message" class="block text-sm font-bold mb-2">Enter Secret Message:</label>
+                            <textarea id="encrypt-message" name="encryptMessage" placeholder="Your secret message here" class="form-control form-textarea" required></textarea>
+                        </div>
+                        <div>
+                            <label for="encrypt-security-code" class="block text-sm font-bold mb-2">Security Code:</label>
+                            <input type="password" id="encrypt-security-code" name="encryptSecurityCode" placeholder="Enter a security code" class="form-control" required>  
+                        </div>
+                        <button type="submit" class="btn btn-primary w-full">Encrypt Message</button>
+                    </form>
+                </div>
+                <div id="image-display-container" class="mt-8">
+                    <!-- Encrypted image and download link will be added here -->
+                </div>
+                <div id="encryption-error" class="mt-4 text-red-500"></div>
+            </section>
+
+            <section id="decryption-section" class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-8">Decrypt Secret Message</h2>
+                <div class="card p-6">
+                    <form id="decryption-form" class="space-y-4" onsubmit="handleDecryption(event)" enctype="multipart/form-data">
+                        <div>
+                            <label for="decrypt-image" class="block text-sm font-bold mb-2">Upload Encrypted Image:</label>
+                            <input type="file" id="decrypt-image" name="decryptImage" accept="image/*" class="form-control" required>
+                        </div>
+                        <div>
+                            <label for="decrypt-security-code" class="block text-sm font-bold mb-2">Security Code:</label>
+                            <input type="password" id="decrypt-security-code" name="decryptSecurityCode" placeholder="Enter the security code" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-accent w-full">Decrypt Message</button>
+                    </form>
+                </div>
+                <div id="decrypted-message-container" class="mt-8">
+                    <!-- Decrypted message will appear here -->
+                </div>
+                <div id="decryption-error" class="mt-4 text-red-500"></div>
+            </section>
+        </main>
+
+        <footer class="text-center py-8 mt-16">
+            <p>&copy; 2025 SecretPixel. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const encryptForm = document.getElementById("encryption-form");
+            const decryptForm = document.getElementById("decryption-form");
+            const imageContainer = document.getElementById("image-display-container");
+            const decryptedMessageContainer = document.getElementById("decrypted-message-container");
+            const encryptionErrorDiv = document.getElementById("encryption-error");
+            const decryptionErrorDiv = document.getElementById("decryption-error");
+
+            async function handleEncryption(event) {
+                event.preventDefault();
+                const formData = new FormData(encryptForm);
+                const submitButton = encryptForm.querySelector("button[type='submit']");
+
+                const securityCode = formData.get("encryptSecurityCode");
+                formData.set("encryptSecurityCode", securityCode);
+
+                imageContainer.innerHTML = "";
+                encryptionErrorDiv.textContent = "";
+                submitButton.disabled = true;
+                submitButton.textContent = "Encrypting...";
+
+                try {
+                    const response = await fetch("/encrypt", {
+                        method: "POST",
+                        body: formData,
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        const downloadLink = document.createElement("a");
+                        downloadLink.href = `/uploads/${result.filename}`;
+                        downloadLink.download = result.filename;
+                        downloadLink.textContent = "Download Encrypted Image";
+
+                        const imgElement = document.createElement("img");
+                        imgElement.src = `/uploads/${result.filename}`;
+                        imgElement.alt = "Encrypted Image";
+                        imgElement.style.maxWidth = "100%";
+                        imgElement.style.height = "auto";
+
+                        imgElement.onload = () => {
+                            imageContainer.appendChild(imgElement);
+                            imageContainer.appendChild(downloadLink);
+                            downloadLink.click();
+                        };
+                        imgElement.onerror = () => {
+                            encryptionErrorDiv.textContent = "Error loading encrypted image.";
+                        }
+                    } else {
+                        encryptionErrorDiv.textContent = result.error || "An unknown error occurred.";
+                    }
+
+                } catch (error) {
+                    console.error("Encryption Error:", error);
+                    encryptionErrorDiv.textContent = "An error occurred during encryption.";
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Encrypt Message";
+                }
+            }
+
+            async function handleDecryption(event) {
+                event.preventDefault();
+                const formData = new FormData(decryptForm);
+                const submitButton = decryptForm.querySelector("button[type='submit']");
+
+                const securityCode = formData.get("decryptSecurityCode");
+                formData.set("decryptSecurityCode", securityCode);
+
+                decryptedMessageContainer.innerHTML = "";
+                decryptionErrorDiv.textContent = "";
+                submitButton.disabled = true;
+                submitButton.textContent = "Decrypting...";
+
+                try {
+                    const response = await fetch("/decrypt", {
+                        method: "POST",
+                        body: formData,
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        const decryptedMessage = document.createElement("p");
+                        decryptedMessage.textContent = result.message;
+                        decryptedMessageContainer.appendChild(decryptedMessage);
+                    } else {
+                        decryptionErrorDiv.textContent = result.error || "An unknown error occurred.";
+                    }
+
+                } catch (error) {
+                    console.error("Decryption Error:", error);
+                    decryptionErrorDiv.textContent = "An error occurred during decryption.";
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Decrypt Message";
+                }
+            }
+
+            encryptForm.addEventListener("submit", handleEncryption);
+            decryptForm.addEventListener("submit", handleDecryption);
+        });
+    </script>
+</body>
+</html>
